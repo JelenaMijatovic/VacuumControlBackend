@@ -1,11 +1,9 @@
 package raf.jmijatovic11421rn.RAFVacuumControl.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
-
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -19,13 +17,6 @@ public class User implements Serializable {
 
     public User() {
 
-    }
-
-    public User(String email, String name, String surname, String password) {
-        this.email = email;
-        this.name = name;
-        this.surname = surname;
-        this.password = password;
     }
 
     @Id

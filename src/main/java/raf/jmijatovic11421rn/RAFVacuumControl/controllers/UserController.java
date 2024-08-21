@@ -12,16 +12,14 @@ import raf.jmijatovic11421rn.RAFVacuumControl.model.Permissions;
 import raf.jmijatovic11421rn.RAFVacuumControl.model.User;
 import raf.jmijatovic11421rn.RAFVacuumControl.services.UserService;
 
-
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 @RestController
 @RequestMapping("/users")
-@CrossOrigin(origins = {"http://localhost:4200, http://localhost:8081"})
+@CrossOrigin(origins = {"http://localhost:4200"})
 public class UserController {
 
     private final UserService userService;

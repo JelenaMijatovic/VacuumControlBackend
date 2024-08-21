@@ -4,13 +4,10 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.scheduling.TaskScheduler;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import raf.jmijatovic11421rn.RAFVacuumControl.model.Permission;
 import raf.jmijatovic11421rn.RAFVacuumControl.model.User;
 import raf.jmijatovic11421rn.RAFVacuumControl.repositories.UserRepository;
 
@@ -62,7 +59,4 @@ public class UserService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), new ArrayList<>());
     }
 
-    public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
-        return null;
-    }
 }
