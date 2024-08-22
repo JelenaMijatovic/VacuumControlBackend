@@ -3,6 +3,7 @@ package raf.jmijatovic11421rn.RAFVacuumControl.model;
 import lombok.Generated;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,11 +19,12 @@ public class Vacuum {
     private Long vacuum_id;
 
     @Column
-    private Status status;
+    private String status;
 
     @Column
     private String addedBy;
 
-    @Column
+    @Column(columnDefinition = "TINYINT")
+    @Type(type = "org.hibernate.type.NumericBooleanType")
     private Boolean active;
 }
