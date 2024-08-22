@@ -13,23 +13,22 @@ import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
-import java.util.Optional;
 
 @Singleton
 @Repository("userRepository")
-public class UserMySQLRepository extends SimpleJpaRepository<User, Long> implements UserRepository {
+public class UserCustomRepository extends SimpleJpaRepository<User, Long> implements UserRepository {
 
     @PersistenceContext
     private EntityManager entityManager;
     private final Object LOCK = new Object();
 
     @Autowired
-    public UserMySQLRepository(EntityManager em) {
+    public UserCustomRepository(EntityManager em) {
         super(User.class, em);
         this.entityManager = em;
     }
 
-    public UserMySQLRepository(Class<User> domainClass, EntityManager em) {
+    public UserCustomRepository(Class<User> domainClass, EntityManager em) {
         super(domainClass, em);
         this.entityManager = em;
     }
@@ -68,41 +67,6 @@ public class UserMySQLRepository extends SimpleJpaRepository<User, Long> impleme
     }
 
     @Override
-    public List<User> findAllById(Iterable<Long> longs) {
-        return null;
-    }
-
-    @Override
-    public long count() {
-        return 0;
-    }
-
-    @Override
-    public void deleteById(Long aLong) {
-
-    }
-
-    @Override
-    public void delete(User entity) {
-
-    }
-
-    @Override
-    public void deleteAllById(Iterable<? extends Long> longs) {
-
-    }
-
-    @Override
-    public void deleteAll(Iterable<? extends User> entities) {
-
-    }
-
-    @Override
-    public void deleteAll() {
-
-    }
-
-    @Override
     @Transactional
     public <S extends User> S save(S entity) {
         if (!entityManager.contains(entity)) {
@@ -117,19 +81,5 @@ public class UserMySQLRepository extends SimpleJpaRepository<User, Long> impleme
         return entityManager.merge(entity);
     }
 
-    @Override
-    public <S extends User> List<S> saveAll(Iterable<S> entities) {
-        return null;
-    }
-
-    @Override
-    public Optional<User> findById(Long aLong) {
-        return Optional.empty();
-    }
-
-    @Override
-    public boolean existsById(Long aLong) {
-        return false;
-    }
 
 }
