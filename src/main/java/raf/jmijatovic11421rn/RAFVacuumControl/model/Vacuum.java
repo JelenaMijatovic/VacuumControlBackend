@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -19,7 +17,8 @@ public class Vacuum {
     private Long vacuum_id;
 
     @Column
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     @Column
     private String addedBy;
