@@ -6,10 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import raf.jmijatovic11421rn.RAFVacuumControl.model.Permission;
-import raf.jmijatovic11421rn.RAFVacuumControl.model.Permissions;
-import raf.jmijatovic11421rn.RAFVacuumControl.model.User;
-import raf.jmijatovic11421rn.RAFVacuumControl.model.Vacuum;
+import raf.jmijatovic11421rn.RAFVacuumControl.model.*;
 import raf.jmijatovic11421rn.RAFVacuumControl.services.UserService;
 import raf.jmijatovic11421rn.RAFVacuumControl.services.VacuumService;
 
@@ -44,8 +41,7 @@ public class VacuumController {
     @PutMapping(value="/{id}/start")
     public ResponseEntity<?> startVacuum(@PathVariable(required = false) Long id) {
         if (checkPermission(Permissions.can_start_vacuum)) {
-            //15 seconds
-            this.vacuumService.startVacuum(id); //new thread
+            this.vacuumService.changeVacuumStatus(id, Status.OFF);
             return ResponseEntity.status(HttpStatus.ACCEPTED).build();
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User does not have the permission to start vacuums");
@@ -54,8 +50,8 @@ public class VacuumController {
     @PutMapping(value="/{id}/stop")
     public ResponseEntity<?> stopVacuum(@PathVariable(required = false) Long id) {
         if (checkPermission(Permissions.can_stop_vacuum)) {
-            //15 seconds
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(this.vacuumService.stopVacuum(id));
+            this.vacuumService.changeVacuumStatus(id, Status.ON);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User does not have the permission to stop vacuums");
     }
@@ -63,8 +59,8 @@ public class VacuumController {
     @PutMapping(value="/{id}/discharge")
     public ResponseEntity<?> dischargeVacuum(@PathVariable(required = false) Long id) {
         if (checkPermission(Permissions.can_discharge_vacuum)) {
-            //30 seconds
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(this.vacuumService.dischargeVacuum(id));
+            this.vacuumService.dischargeVacuum(id);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User does not have the permission to discharge vacuums");
     }

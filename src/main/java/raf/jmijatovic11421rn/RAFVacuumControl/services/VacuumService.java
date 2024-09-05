@@ -32,30 +32,31 @@ public class VacuumService {
         return vacuumRepository.findAll(spec);
     }
 
-    public void startVacuum(Long id) {
-        Optional<Vacuum> v = vacuumRepository.findById(id);
-        if (v.isPresent()) {
-            Vacuum vacuum = v.get();
-            if (vacuum.getStatus().equals(Status.OFF)) {
-                vacuum.setStatus(Status.ON);
-                vacuumRepository.save(vacuum);
-            }
+    public void changeVacuumStatus(Long id, Status status) {
+        Vacuum v = vacuumRepository.findByVacuumId(id);
+        if (v.getStatus().equals(status)) {
+            StatusChangeThread t = new StatusChangeThread(v, vacuumRepository);
+            t.start();
         }
     }
 
-    public boolean stopVacuum(Long id) {
-        return false;
-    }
-
-    public boolean dischargeVacuum(Long id) {
-        return false;
+    public void dischargeVacuum(Long id) {
+        Vacuum v = vacuumRepository.findByVacuumId(id);
+        if (v.getStatus().equals(Status.OFF)) {
+            DischargeThread t = new DischargeThread(v, vacuumRepository);
+            t.start();
+        }
     }
 
     public Vacuum addVacuum(Vacuum vacuum) {
         return vacuumRepository.save(vacuum);
     }
 
-    public void removeVacuum(Long vacuum) {
-        vacuumRepository.deleteById(vacuum);
+    public void removeVacuum(Long id) {
+        Vacuum v = vacuumRepository.findByVacuumId(id);
+        if (v.getStatus().equals(Status.OFF)) {
+            v.setActive(false);
+            vacuumRepository.save(v);
+        }
     }
 }
