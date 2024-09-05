@@ -35,7 +35,8 @@ public class VacuumController {
     @GetMapping(value="/search")
     public ResponseEntity<?> searchVacuums(@RequestParam(required = false) String name, @RequestParam(required = false) List<String> status, @RequestParam(required = false) Date dateFrom, @RequestParam(required = false) Date dateTo) {
         if (checkPermission(Permissions.can_search_vacuum)) {
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(this.vacuumService.searchVacuums(name, status, dateFrom, dateTo));
+            String email = SecurityContextHolder.getContext().getAuthentication().getName();
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(this.vacuumService.searchVacuums(email, name, status, dateFrom, dateTo));
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User does not have the permission to search vacuums");
     }
@@ -44,7 +45,8 @@ public class VacuumController {
     public ResponseEntity<?> startVacuum(@PathVariable(required = false) Long id) {
         if (checkPermission(Permissions.can_start_vacuum)) {
             //15 seconds
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(this.vacuumService.startVacuum(id));
+            this.vacuumService.startVacuum(id); //new thread
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User does not have the permission to start vacuums");
     }
@@ -85,8 +87,8 @@ public class VacuumController {
     }
 
     public boolean checkPermission(Permissions permission) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        User activeUser = this.userService.findByEmail(username);
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User activeUser = this.userService.findByEmail(email);
         Set<Permission> permissions = activeUser.getPermissions();
         return permissions.contains(new Permission(permission.toString()));
     }

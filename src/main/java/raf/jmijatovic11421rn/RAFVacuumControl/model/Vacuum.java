@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -14,7 +15,10 @@ public class Vacuum {
 
     @Id
     @Generated
-    private Long vacuum_id;
+    private Long vacuumId;
+
+    @Column
+    private String name;
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -22,6 +26,9 @@ public class Vacuum {
 
     @Column
     private String addedBy;
+
+    @Column
+    private Date creationDate;
 
     @Column(columnDefinition = "TINYINT")
     @Type(type = "org.hibernate.type.NumericBooleanType")
