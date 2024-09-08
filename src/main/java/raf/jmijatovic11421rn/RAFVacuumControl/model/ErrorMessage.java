@@ -1,13 +1,10 @@
 package raf.jmijatovic11421rn.RAFVacuumControl.model;
 
-import lombok.Generated;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import java.util.Date;
+import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Entity
 @Getter
@@ -15,11 +12,11 @@ import java.util.Date;
 public class ErrorMessage {
 
     @Id
-    @Generated
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
     @Column
-    private Date date;
+    private Timestamp date;
 
     @Column
     private Long vacuumId;
@@ -29,4 +26,15 @@ public class ErrorMessage {
 
     @Column
     private String errorText;
+
+    public ErrorMessage() {
+
+    }
+
+    public ErrorMessage(Timestamp date, Long vacuumId, String action, String errorText) {
+        this.date = date;
+        this.vacuumId = vacuumId;
+        this.action = action;
+        this.errorText = errorText;
+    }
 }
