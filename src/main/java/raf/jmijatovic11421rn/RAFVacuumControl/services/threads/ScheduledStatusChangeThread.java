@@ -1,4 +1,4 @@
-package raf.jmijatovic11421rn.RAFVacuumControl.services;
+package raf.jmijatovic11421rn.RAFVacuumControl.services.threads;
 
 public class ScheduledStatusChangeThread extends WaitingThread implements Runnable {
 

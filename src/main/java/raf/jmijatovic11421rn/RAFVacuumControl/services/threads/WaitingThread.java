@@ -1,4 +1,4 @@
-package raf.jmijatovic11421rn.RAFVacuumControl.services;
+package raf.jmijatovic11421rn.RAFVacuumControl.services.threads;
 
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -8,7 +8,7 @@ public abstract class WaitingThread extends Thread {
     Long id;
     String action;
 
-    private final Set<WaitingThreadListener> listeners = new CopyOnWriteArraySet<WaitingThreadListener>();
+    private final Set<WaitingThreadListener> listeners = new CopyOnWriteArraySet<>();
 
     public WaitingThread(Long id, String action) {
         super();
@@ -16,11 +16,11 @@ public abstract class WaitingThread extends Thread {
         this.action = action;
     }
 
-    public final void addListener(final WaitingThreadListener listener) {
+    public void addListener(final WaitingThreadListener listener) {
         listeners.add(listener);
     }
 
-    private final void notifyListeners() {
+    private void notifyListeners() {
         for (WaitingThreadListener listener : listeners) {
             listener.notify(this, id, action);
         }

@@ -12,6 +12,9 @@ import raf.jmijatovic11421rn.RAFVacuumControl.model.Vacuum;
 import raf.jmijatovic11421rn.RAFVacuumControl.repositories.ErrorMessageRepository;
 import raf.jmijatovic11421rn.RAFVacuumControl.repositories.VacuumRepository;
 import raf.jmijatovic11421rn.RAFVacuumControl.repositories.VacuumSpec;
+import raf.jmijatovic11421rn.RAFVacuumControl.services.threads.ScheduledStatusChangeThread;
+import raf.jmijatovic11421rn.RAFVacuumControl.services.threads.StatusChangeThread;
+import raf.jmijatovic11421rn.RAFVacuumControl.services.threads.WaitingThreadListener;
 
 import java.sql.Timestamp;
 import java.util.Date;
