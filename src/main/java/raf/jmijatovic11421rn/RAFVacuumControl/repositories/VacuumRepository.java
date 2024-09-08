@@ -11,5 +11,9 @@ import java.util.List;
 public interface VacuumRepository extends CrudRepository<Vacuum, Long> {
 
     List<Vacuum> findAll(Specification<Vacuum> spec);
+    List<Vacuum> findAllByAddedBy(String email);
     Vacuum findByVacuumId(long id);
+
+    <S extends Vacuum> void update(S entity);
+    void lock(Vacuum v);
 }

@@ -1,6 +1,7 @@
 package raf.jmijatovic11421rn.RAFVacuumControl.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,36 +31,36 @@ public class VacuumController {
     }
 
     @GetMapping(value="/search")
-    public ResponseEntity<?> searchVacuums(@RequestParam(required = false) String name, @RequestParam(required = false) List<String> status, @RequestParam(required = false) Date dateFrom, @RequestParam(required = false) Date dateTo) {
+    public ResponseEntity<?> searchVacuums(@RequestParam(name = "name", required = false) String name, @RequestParam(name = "status", required = false) List<Status> status, @RequestParam(name = "datefrom", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date datefrom, @RequestParam(name = "dateto", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date dateto) {
         if (checkPermission(Permissions.can_search_vacuum)) {
             String email = SecurityContextHolder.getContext().getAuthentication().getName();
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(this.vacuumService.searchVacuums(email, name, status, dateFrom, dateTo));
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(this.vacuumService.searchVacuums(email, name, status, datefrom, dateto));
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User does not have the permission to search vacuums");
     }
 
-    @PutMapping(value="/{id}/start")
-    public ResponseEntity<?> startVacuum(@PathVariable(required = false) Long id) {
+    @GetMapping(value="/{id}/start")
+    public ResponseEntity<?> startVacuum(@PathVariable Long id) {
         if (checkPermission(Permissions.can_start_vacuum)) {
-            this.vacuumService.changeVacuumStatus(id, Status.OFF);
+            this.vacuumService.startVacuumStatusChange(id, Status.OFF);
             return ResponseEntity.status(HttpStatus.ACCEPTED).build();
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User does not have the permission to start vacuums");
     }
 
-    @PutMapping(value="/{id}/stop")
-    public ResponseEntity<?> stopVacuum(@PathVariable(required = false) Long id) {
+    @GetMapping(value="/{id}/stop")
+    public ResponseEntity<?> stopVacuum(@PathVariable Long id) {
         if (checkPermission(Permissions.can_stop_vacuum)) {
-            this.vacuumService.changeVacuumStatus(id, Status.ON);
+            this.vacuumService.startVacuumStatusChange(id, Status.ON);
             return ResponseEntity.status(HttpStatus.ACCEPTED).build();
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User does not have the permission to stop vacuums");
     }
 
-    @PutMapping(value="/{id}/discharge")
-    public ResponseEntity<?> dischargeVacuum(@PathVariable(required = false) Long id) {
+    @GetMapping(value="/{id}/discharge")
+    public ResponseEntity<?> dischargeVacuum(@PathVariable Long id) {
         if (checkPermission(Permissions.can_discharge_vacuum)) {
-            this.vacuumService.dischargeVacuum(id);
+            this.vacuumService.startVacuumDischarge(id);
             return ResponseEntity.status(HttpStatus.ACCEPTED).build();
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User does not have the permission to discharge vacuums");
@@ -74,12 +75,23 @@ public class VacuumController {
     }
 
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> removeVacuum(@PathVariable(required = false) Long id) {
+    public ResponseEntity<?> removeVacuum(@PathVariable Long id) {
         if (checkPermission(Permissions.can_remove_vacuum)) {
             this.vacuumService.removeVacuum(id);
             return ResponseEntity.status(HttpStatus.ACCEPTED).build();
         }
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User does not have the permission to add vacuums");
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User does not have the permission to remove vacuums");
+    }
+
+    @PostMapping(value = "/schedule", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> schedule(@Valid @RequestBody ScheduledTask task) {
+        if ((task.getAction().equals("START") && checkPermission(Permissions.can_start_vacuum)) ||
+                (task.getAction().equals("STOP") && checkPermission(Permissions.can_stop_vacuum)) ||
+                        (task.getAction().equals("DISCHARGE") && checkPermission(Permissions.can_discharge_vacuum))) {
+            vacuumService.schedule(task);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User does not have the permission to " + task.getAction().toLowerCase() + " vacuums");
     }
 
     public boolean checkPermission(Permissions permission) {

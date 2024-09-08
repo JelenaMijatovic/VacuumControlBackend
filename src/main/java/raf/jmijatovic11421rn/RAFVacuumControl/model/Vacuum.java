@@ -1,6 +1,5 @@
 package raf.jmijatovic11421rn.RAFVacuumControl.model;
 
-import lombok.Generated;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
@@ -14,7 +13,7 @@ import java.util.Date;
 public class Vacuum {
 
     @Id
-    @Generated
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long vacuumId;
 
     @Column
@@ -33,4 +32,10 @@ public class Vacuum {
     @Column(columnDefinition = "TINYINT")
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private Boolean active;
+
+    private Integer cycles;
+
+    @Column(columnDefinition = "TINYINT")
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    private Boolean dirty;
 }

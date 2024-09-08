@@ -9,6 +9,7 @@ import raf.jmijatovic11421rn.RAFVacuumControl.model.Vacuum;
 import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.List;
 
 @Singleton
 @Repository("vacuumRepository")
@@ -29,10 +30,10 @@ public class VacuumCustomRepository extends SimpleJpaRepository<Vacuum, Long> im
         this.entityManager = em;
     }
 
-    /*@Override
-    public List<Vacuum> findAll(Specification<Vacuum> spec) {
-        return null;
-    }*/
+    @Override
+    public List<Vacuum> findAllByAddedBy(String email) {
+        return (List<Vacuum>) entityManager.createQuery("SELECT v FROM Vacuum v WHERE v.addedBy = ?1").setParameter(1, email).getResultList();
+    }
 
     @Override
     public Vacuum findByVacuumId(long id) {
@@ -48,4 +49,15 @@ public class VacuumCustomRepository extends SimpleJpaRepository<Vacuum, Long> im
         return entity;
     }
 
+    @Override
+    @Transactional
+    public <S extends Vacuum> void update(S entity) {
+        entityManager.merge(entity);
+    }
+    @Override
+    @Transactional
+    public void lock(Vacuum v) {
+        v.setDirty(!v.getDirty());
+        entityManager.merge(v);
+    }
 }
