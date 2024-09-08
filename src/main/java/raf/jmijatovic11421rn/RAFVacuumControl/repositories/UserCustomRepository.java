@@ -20,7 +20,6 @@ public class UserCustomRepository extends SimpleJpaRepository<User, Long> implem
 
     @PersistenceContext
     private EntityManager entityManager;
-    private final Object LOCK = new Object();
 
     @Autowired
     public UserCustomRepository(EntityManager em) {
@@ -35,34 +34,26 @@ public class UserCustomRepository extends SimpleJpaRepository<User, Long> implem
 
     @Override
     public User findUserByEmail(String email) {
-        synchronized (LOCK) {
-            return entityManager.find(this.getDomainClass(), email);
-        }
+        return entityManager.find(this.getDomainClass(), email);
     }
 
     @Override
     @Transactional
     public void deleteByEmail(String email) {
-        synchronized (LOCK) {
-            entityManager.remove(entityManager.find(this.getDomainClass(), email));
-        }
+        entityManager.remove(entityManager.find(this.getDomainClass(), email));
     }
 
     @Override
     public List<User> findAll() {
-        synchronized (LOCK) {
-            return (List<User>) entityManager.createQuery("SELECT u FROM User u").getResultList();
-        }
+        return (List<User>) entityManager.createQuery("SELECT u FROM User u").getResultList();
     }
 
     @Override
     public Page<User> findAll(Pageable page) {
         List<User> users;
-        synchronized (LOCK) {
-             users = entityManager.createQuery("SELECT u FROM User u")
+        users = entityManager.createQuery("SELECT u FROM User u")
                     .setFirstResult(page.getPageNumber() * page.getPageSize())
                     .setMaxResults(page.getPageSize()).getResultList();
-        }
         return new PageImpl<>(users);
     }
 

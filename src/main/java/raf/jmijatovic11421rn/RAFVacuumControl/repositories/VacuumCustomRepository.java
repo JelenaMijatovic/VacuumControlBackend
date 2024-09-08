@@ -17,7 +17,6 @@ public class VacuumCustomRepository extends SimpleJpaRepository<Vacuum, Long> im
 
     @PersistenceContext
     private EntityManager entityManager;
-    private final Object LOCK = new Object();
 
     @Autowired
     public VacuumCustomRepository(EntityManager em) {
