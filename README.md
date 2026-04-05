@@ -1,8 +1,8 @@
-Backend for a Spring web app simulating remote asynchronous vacuum controls. [Frontend in Angular here.](https://github.com/JelenaMijatovic/VacuumControlAngular)
+Backend for a Spring web app simulating remote asynchronous vacuum controls. Includes user authentication via JWT token. [Frontend in Angular here.](https://github.com/JelenaMijatovic/VacuumControlAngular)
 
 Vacuums have one of three statuses: **ON**, **OFF** or **DISCHARGING**. It takes a short amount of time to transition between statuses during which no changes can be made. 
 
-**Methods**
+**Vacuum control methods**
 
 POST ```/vacuums/schedule/```
 
