@@ -22,15 +22,15 @@ Searches for vacuums according to request parameters. Available parameters are n
 
 GET ```/vacuums/{id}/start```
 
-Tells a vacuum of id {id} to start up. Has no effect unless the vacuum status is OFF.
+Tells a vacuum of id ```id``` to start up. Has no effect unless the vacuum status is OFF.
 
 GET ```/vacuums/{id}/stop```
 
-Tells a vacuum of id {id} to stop. Has no effect unless the vacuum status is ON.
+Tells a vacuum of id ```id``` to stop. Has no effect unless the vacuum status is ON.
 
 GET ```/vacuums/{id}/discharge```
 
-Tells a vacuum of id {id} to start the discharge action. Requires the vacuum status to be OFF. After discharging, the status will automatically return to OFF.
+Tells a vacuum of id ```id``` to start the discharge action. Requires the vacuum status to be OFF. After discharging, the status will automatically return to OFF.
 
 POST ```/vacuums/```
 
@@ -43,4 +43,4 @@ Adds a new vacuum or changes its name. Accepts body:
 
 DELETE ```/vacuums/{id}```
 
-Removes vacuum with id {id}. The vacuum status must be OFF.
+Removes vacuum with id ```id```. The vacuum status must be OFF.
